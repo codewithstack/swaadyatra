@@ -60,7 +60,7 @@ function ContactForm() {
     const e: Partial<FormState> = {};
     if (!form.name.trim()) e.name = "Full name is required.";
     if (!form.email.trim()) e.email = "Email is required.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email.";
+    else if (form.email.length > 254 || form.email.indexOf("@") < 1) e.email = "Enter a valid email.";
     if (!form.city.trim()) e.city = "City is required.";
     if (!form.subject.trim()) e.subject = "Subject is required.";
     if (!form.message.trim()) e.message = "Message cannot be empty.";

@@ -69,6 +69,7 @@ export default function CitySearch({ cities }: { cities: CityMeta[] }) {
         placeholder="Search cities to explore street food…"
         autoComplete="off"
         className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E23744] focus:border-transparent"
+        suppressHydrationWarning
       />
 
       {open && filtered.length > 0 && (

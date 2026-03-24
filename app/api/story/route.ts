@@ -13,10 +13,14 @@ interface StoryPayload {
 
 function validate(data: StoryPayload): string | null {
   if (!data.name?.trim()) return "Name is required.";
+  if (data.name.length > 100) return "Name must be under 100 characters.";
   if (!data.email?.trim()) return "Email is required.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return "Enter a valid email address.";
+  if (data.email.length > 254) return "Enter a valid email address.";
+  const atIdx = data.email.indexOf("@");
+  if (atIdx < 1 || atIdx !== data.email.lastIndexOf("@") || !data.email.slice(atIdx + 1).includes(".")) return "Enter a valid email address.";
   if (!data.story?.trim()) return "Story is required.";
   if (data.story.trim().length < 20) return "Please write at least a few sentences.";
+  if (data.story.length > 10000) return "Story must be under 10,000 characters.";
   return null;
 }
 
@@ -38,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: "SwaadYatra Stories <onboarding@resend.dev>",
-      to: "jainkanika708@gmail.com",
+      to: "swaadyatraa@gmail.com",
       replyTo: email,
       subject: `[SwaadYatra] New Story from ${esc(name)}`,
       html: `

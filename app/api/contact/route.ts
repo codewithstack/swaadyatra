@@ -15,10 +15,15 @@ interface ContactPayload {
 function validate(data: ContactPayload): string | null {
   const { name, email, subject, message } = data;
   if (!name?.trim()) return "Name is required.";
+  if (name.length > 100) return "Name must be under 100 characters.";
   if (!email?.trim()) return "Email is required.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address.";
+  if (email.length > 254) return "Enter a valid email address.";
+  const atIdx = email.indexOf("@");
+  if (atIdx < 1 || atIdx !== email.lastIndexOf("@") || !email.slice(atIdx + 1).includes(".")) return "Enter a valid email address.";
   if (!subject?.trim()) return "Subject is required.";
+  if (subject.length > 150) return "Subject must be under 150 characters.";
   if (!message?.trim()) return "Message is required.";
+  if (message.length > 5000) return "Message must be under 5000 characters.";
   return null;
 }
 
@@ -40,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: "SwaadYatra Contact <onboarding@resend.dev>",
-      to: "jainkanika708@gmail.com",
+      to: "swaadyatraa@gmail.com",
       replyTo: email,
       subject: `[SwaadYatra] ${esc(subject)}`,
       html: `

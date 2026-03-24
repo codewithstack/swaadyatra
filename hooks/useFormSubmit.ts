@@ -19,7 +19,10 @@ export function useFormSubmit<T>({ url, onSuccess, buildBody, headers }: Options
     setStatus("loading");
     setApiMessage("");
     try {
-      const res = await fetch(url, { method: "POST", headers, body: buildBody(data) });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(url, { method: "POST", headers, body: buildBody(data), signal: controller.signal });
+      clearTimeout(timeout);
       const json = await res.json();
       if (res.ok && json.success) {
         setStatus("success");

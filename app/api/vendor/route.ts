@@ -31,6 +31,12 @@ export async function POST(req: NextRequest) {
     if (!vendorName || !foodSpotName || !city || !famousFood || !contactNumber || !description) {
       return NextResponse.json({ success: false, message: "All fields are required." }, { status: 400 });
     }
+    if (vendorName.length > 100 || foodSpotName.length > 100 || city.length > 100 || famousFood.length > 200) {
+      return NextResponse.json({ success: false, message: "One or more fields exceed the maximum allowed length." }, { status: 400 });
+    }
+    if (description.length > 2000) {
+      return NextResponse.json({ success: false, message: "Description must be under 2000 characters." }, { status: 400 });
+    }
     if (!/^[0-9]{10}$/.test(contactNumber)) {
       return NextResponse.json({ success: false, message: "Enter a valid 10-digit contact number." }, { status: 400 });
     }
@@ -57,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     await resend.emails.send({
       from: "SwaadYatra Listings <onboarding@resend.dev>",
-      to: "jainkanika708@gmail.com",
+      to: "swaadyatraa@gmail.com",
       subject: `[SwaadYatra] New Food Spot Listing — ${esc(foodSpotName)}, ${esc(city)}`,
       attachments,
       html: `
